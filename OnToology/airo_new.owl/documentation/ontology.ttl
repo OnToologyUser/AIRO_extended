@@ -1,0 +1,978 @@
+@prefix : <https://w3id.org/airo#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <https://w3id.org/airo#> .
+
+<https://w3id.org/airo> rdf:type owl:Ontology ;
+                         owl:versionIRI <https://w3id.org/airo/2.8> ;
+                         <http://purl.org/dc/terms/description> "此版本为最终完整定义版。移除了'AI事件'和'prov:Activity'。'时间'与'报道'直接关联至'风险'或'活动'。所有概念均包含基于权威标准的中文定义。"@zh-cn ;
+                         rdfs:label "AI 风险本体 (Full Definition & No Event Version)"@zh-cn .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://purl.org/dc/terms/description
+<http://purl.org/dc/terms/description> rdf:type owl:AnnotationProperty .
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://www.w3.org/ns/prov#generated
+<http://www.w3.org/ns/prov#generated> rdf:type owl:ObjectProperty ;
+                                      rdfs:label "生成了 (prov:generated)"@zh-cn .
+
+
+###  http://www.w3.org/ns/prov#used
+<http://www.w3.org/ns/prov#used> rdf:type owl:ObjectProperty ;
+                                 rdfs:label "使用了 (prov:used)"@zh-cn .
+
+
+###  http://www.w3.org/ns/prov#wasGeneratedBy
+<http://www.w3.org/ns/prov#wasGeneratedBy> rdf:type owl:ObjectProperty ;
+                                           rdfs:label "生成自 (prov:wasGeneratedBy)"@zh-cn .
+
+
+###  http://www.w3.org/ns/prov#wasInformedBy
+<http://www.w3.org/ns/prov#wasInformedBy> rdf:type owl:ObjectProperty ;
+                                          rdfs:label "获知于 (prov:wasInformedBy)"@zh-cn .
+
+
+###  https://w3id.org/airo#产生风险控制
+:产生风险控制 rdf:type owl:ObjectProperty ;
+        rdfs:subPropertyOf <http://www.w3.org/ns/prov#generated> ;
+        rdfs:domain :风险应对 ;
+        rdfs:range :风险控制措施 ;
+        rdfs:comment "指示生成了风险控制措施。"@zh-cn ;
+        rdfs:label "产生风险控制"@zh-cn .
+
+
+###  https://w3id.org/airo#使用技术
+:使用技术 rdf:type owl:ObjectProperty ;
+      rdfs:domain [ rdf:type owl:Class ;
+                    owl:unionOf ( :AI系统
+                                  :AI组件
+                                )
+                  ] ;
+      rdfs:range :AI技术 ;
+      rdfs:comment "指示使用的 AI 技术。"@zh-cn ;
+      rdfs:label "使用技术"@zh-cn .
+
+
+###  https://w3id.org/airo#使用数据集
+:使用数据集 rdf:type owl:ObjectProperty ;
+       rdfs:subPropertyOf <http://www.w3.org/ns/prov#used> ;
+       rdfs:domain :AI生命周期活动 ;
+       rdfs:range :数据 ;
+       rdfs:comment "指示活动使用了特定的数据集。"@zh-cn ;
+       rdfs:label "使用数据集"@zh-cn .
+
+
+###  https://w3id.org/airo#分析风险
+:分析风险 rdf:type owl:ObjectProperty ;
+      rdfs:subPropertyOf <http://www.w3.org/ns/prov#used> ;
+      rdfs:domain :风险分析 ;
+      rdfs:range :风险 ;
+      rdfs:comment "指示正在分析哪个风险。"@zh-cn ;
+      rdfs:label "分析风险"@zh-cn .
+
+
+###  https://w3id.org/airo#利用脆弱性
+:利用脆弱性 rdf:type owl:ObjectProperty ;
+       rdfs:domain :风险源 ;
+       rdfs:range :脆弱性 ;
+       rdfs:comment "指示风险源所利用的系统弱点。"@zh-cn ;
+       rdfs:label "利用脆弱性"@zh-cn .
+
+
+###  https://w3id.org/airo#后继控制为
+:后继控制为 rdf:type owl:ObjectProperty ;
+       rdfs:domain :风险管理活动 ;
+       rdfs:range :风险管理活动 ;
+       rdfs:comment "指定活动的逻辑顺序。"@zh-cn ;
+       rdfs:label "后继控制为"@zh-cn .
+
+
+###  https://w3id.org/airo#对利益相关者产生影响
+:对利益相关者产生影响 rdf:type owl:ObjectProperty ;
+            rdfs:domain :影响 ;
+            rdfs:range :利益相关者 ;
+            rdfs:comment "指示受影响的人员或组织。"@zh-cn ;
+            rdfs:label "对利益相关者产生影响"@zh-cn .
+
+
+###  https://w3id.org/airo#属于风险分类
+:属于风险分类 rdf:type owl:ObjectProperty ;
+        rdfs:domain :风险 ;
+        rdfs:range :风险分类 ;
+        rdfs:comment "指定风险所属的类别。"@zh-cn ;
+        rdfs:label "属于风险分类"@zh-cn .
+
+
+###  https://w3id.org/airo#应用于领域
+:应用于领域 rdf:type owl:ObjectProperty ;
+       rdfs:domain [ rdf:type owl:Class ;
+                     owl:unionOf ( :AI系统
+                                   :AI组件
+                                 )
+                   ] ;
+       rdfs:range :领域 ;
+       rdfs:comment "指定应用的行业或领域。"@zh-cn ;
+       rdfs:label "应用于领域"@zh-cn .
+
+
+###  https://w3id.org/airo#执行于
+:执行于 rdf:type owl:ObjectProperty ;
+     rdfs:domain :AI生命周期活动 ;
+     rdfs:range :AI系统 ;
+     rdfs:comment "指示活动针对的 AI 系统。"@zh-cn ;
+     rdfs:label "执行于"@zh-cn .
+
+
+###  https://w3id.org/airo#拥有AI对象
+:拥有AI对象 rdf:type owl:ObjectProperty ;
+        rdfs:domain :AI系统 ;
+        rdfs:range :AI对象 ;
+        rdfs:comment "指示 AI 系统的对象（受影响主体）。"@zh-cn ;
+        rdfs:label "拥有AI对象"@zh-cn .
+
+
+###  https://w3id.org/airo#拥有AI用户
+:拥有AI用户 rdf:type owl:ObjectProperty ;
+        rdfs:domain :AI系统 ;
+        rdfs:range :AI用户 ;
+        rdfs:comment "指示 AI 系统的最终用户。"@zh-cn ;
+        rdfs:label "拥有AI用户"@zh-cn .
+
+
+###  https://w3id.org/airo#拥有严重性
+:拥有严重性 rdf:type owl:ObjectProperty ;
+       rdfs:domain [ rdf:type owl:Class ;
+                     owl:unionOf ( :后果
+                                   :影响
+                                 )
+                   ] ;
+       rdfs:range :严重性 ;
+       rdfs:comment "指示后果的严重程度。"@zh-cn ;
+       rdfs:label "拥有严重性"@zh-cn .
+
+
+###  https://w3id.org/airo#拥有利益相关者
+:拥有利益相关者 rdf:type owl:ObjectProperty ;
+         rdfs:domain [ rdf:type owl:Class ;
+                       owl:unionOf ( :AI系统
+                                     :AI组件
+                                   )
+                     ] ;
+         rdfs:range :利益相关者 ;
+         rdfs:comment "指示相关的利益相关者。"@zh-cn ;
+         rdfs:label "拥有利益相关者"@zh-cn .
+
+
+###  https://w3id.org/airo#拥有可能性
+:拥有可能性 rdf:type owl:ObjectProperty ;
+       rdfs:domain :风险概念 ;
+       rdfs:range :可能性 ;
+       rdfs:comment "指示风险发生的概率。"@zh-cn ;
+       rdfs:label "拥有可能性"@zh-cn .
+
+
+###  https://w3id.org/airo#拥有后果
+:拥有后果 rdf:type owl:ObjectProperty ;
+      rdfs:domain :风险 ;
+      rdfs:range :后果 ;
+      rdfs:comment "指定风险实现后导致的直接后果。"@zh-cn ;
+      rdfs:label "拥有后果"@zh-cn .
+
+
+###  https://w3id.org/airo#拥有影响
+:拥有影响 rdf:type owl:ObjectProperty ;
+      rdfs:domain :后果 ;
+      rdfs:range :影响 ;
+      rdfs:comment "指定后果实现后造成的广泛影响。"@zh-cn ;
+      rdfs:label "拥有影响"@zh-cn .
+
+
+###  https://w3id.org/airo#拥有描述
+:拥有描述 rdf:type owl:ObjectProperty ;
+      rdfs:domain [ rdf:type owl:Class ;
+                    owl:unionOf ( :风险
+                                  :风险管理活动
+                                )
+                  ] ;
+      rdfs:range :详细描述 ;
+      rdfs:comment "关联风险或活动与其文本摘要描述。"@zh-cn ;
+      rdfs:label "拥有描述"@zh-cn .
+
+
+###  https://w3id.org/airo#拥有文档
+:拥有文档 rdf:type owl:ObjectProperty ;
+      rdfs:range :文档 ;
+      rdfs:comment "指示与实体关联的文档信息。"@zh-cn ;
+      rdfs:label "拥有文档"@zh-cn .
+
+
+###  https://w3id.org/airo#拥有时间要素
+:拥有时间要素 rdf:type owl:ObjectProperty ;
+        rdfs:domain [ rdf:type owl:Class ;
+                      owl:unionOf ( :AI生命周期活动
+                                    :风险
+                                    :风险管理活动
+                                  )
+                    ] ;
+        rdfs:range :时间要素 ;
+        rdfs:comment "关联活动或风险与相关的时间线 (发生/发现/持续时间)。"@zh-cn ;
+        rdfs:label "拥有时间要素"@zh-cn .
+
+
+###  https://w3id.org/airo#拥有模型
+:拥有模型 rdf:type owl:ObjectProperty ;
+      rdfs:subPropertyOf :拥有组件 ;
+      rdfs:range :AI模型 ;
+      rdfs:comment "指示系统使用的特定模型。"@zh-cn ;
+      rdfs:label "拥有模型"@zh-cn .
+
+
+###  https://w3id.org/airo#拥有残余风险
+:拥有残余风险 rdf:type owl:ObjectProperty ;
+        rdfs:domain :风险 ;
+        rdfs:range :风险 ;
+        rdfs:comment "指示应对措施实施后剩余的风险。"@zh-cn ;
+        rdfs:label "拥有残余风险"@zh-cn .
+
+
+###  https://w3id.org/airo#拥有测试数据
+:拥有测试数据 rdf:type owl:ObjectProperty ;
+        rdfs:subPropertyOf :拥有组件 ;
+        rdfs:range :数据 ;
+        rdfs:comment "指示用于测试的数据集。"@zh-cn ;
+        rdfs:label "拥有测试数据"@zh-cn .
+
+
+###  https://w3id.org/airo#拥有版本
+:拥有版本 rdf:type owl:ObjectProperty ;
+      rdfs:range :版本 ;
+      rdfs:comment "指示实体的版本信息。"@zh-cn ;
+      rdfs:label "拥有版本"@zh-cn .
+
+
+###  https://w3id.org/airo#拥有目的
+:拥有目的 rdf:type owl:ObjectProperty ;
+      rdfs:range :目的 ;
+      rdfs:comment "指示实体的预期目的。"@zh-cn ;
+      rdfs:label "拥有目的"@zh-cn .
+
+
+###  https://w3id.org/airo#拥有组件
+:拥有组件 rdf:type owl:ObjectProperty ;
+      rdfs:range :AI组件 ;
+      rdfs:comment "指示构成 AI 系统或其他组件的要素。"@zh-cn ;
+      rdfs:label "拥有组件"@zh-cn .
+
+
+###  https://w3id.org/airo#拥有能力
+:拥有能力 rdf:type owl:ObjectProperty ;
+      rdfs:domain [ rdf:type owl:Class ;
+                    owl:unionOf ( :AI系统
+                                  :AI组件
+                                )
+                  ] ;
+      rdfs:range :AI能力 ;
+      rdfs:comment "指定在 AI 系统中实现以达成其目的的能力。"@zh-cn ;
+      rdfs:label "拥有能力"@zh-cn .
+
+
+###  https://w3id.org/airo#拥有脆弱性
+:拥有脆弱性 rdf:type owl:ObjectProperty ;
+       rdfs:range :脆弱性 ;
+       rdfs:comment "指示关联的脆弱性。"@zh-cn ;
+       rdfs:label "拥有脆弱性"@zh-cn .
+
+
+###  https://w3id.org/airo#拥有自动化水平
+:拥有自动化水平 rdf:type owl:ObjectProperty ;
+         rdfs:domain :AI系统 ;
+         rdfs:range :自动化水平 ;
+         rdfs:comment "指示系统的自动化程度。"@zh-cn ;
+         rdfs:label "拥有自动化水平"@zh-cn .
+
+
+###  https://w3id.org/airo#拥有训练数据
+:拥有训练数据 rdf:type owl:ObjectProperty ;
+        rdfs:subPropertyOf :拥有组件 ;
+        rdfs:range :数据 ;
+        rdfs:comment "指示用于训练的数据集。"@zh-cn ;
+        rdfs:label "拥有训练数据"@zh-cn .
+
+
+###  https://w3id.org/airo#拥有输入
+:拥有输入 rdf:type owl:ObjectProperty ;
+      rdfs:domain [ rdf:type owl:Class ;
+                    owl:unionOf ( :AI系统
+                                  :AI组件
+                                )
+                  ] ;
+      rdfs:range :输入 ;
+      rdfs:comment "指示生成输出所需的输入数据。"@zh-cn ;
+      rdfs:label "拥有输入"@zh-cn .
+
+
+###  https://w3id.org/airo#拥有风险
+:拥有风险 rdf:type owl:ObjectProperty ;
+      rdfs:range :风险 ;
+      rdfs:comment "指示关联的风险。"@zh-cn ;
+      rdfs:label "拥有风险"@zh-cn .
+
+
+###  https://w3id.org/airo#拥有风险控制
+:拥有风险控制 rdf:type owl:ObjectProperty ;
+        rdfs:range :风险管理活动 ;
+        rdfs:comment "指示关联的风险管理活动或控制措施。"@zh-cn ;
+        rdfs:label "拥有风险管理(原风险控制)"@zh-cn .
+
+
+###  https://w3id.org/airo#拥有风险等级
+:拥有风险等级 rdf:type owl:ObjectProperty ;
+        rdfs:domain :风险 ;
+        rdfs:range :风险等级 ;
+        rdfs:comment "指定风险的量化或定性等级。"@zh-cn ;
+        rdfs:label "拥有风险等级"@zh-cn .
+
+
+###  https://w3id.org/airo#拥有验证数据
+:拥有验证数据 rdf:type owl:ObjectProperty ;
+        rdfs:subPropertyOf :拥有组件 ;
+        rdfs:range :数据 ;
+        rdfs:comment "指示用于验证的数据集。"@zh-cn ;
+        rdfs:label "拥有验证数据"@zh-cn .
+
+
+###  https://w3id.org/airo#是风险源于
+:是风险源于 rdf:type owl:ObjectProperty ;
+       rdfs:domain :风险源 ;
+       rdfs:range :风险 ;
+       rdfs:comment "指定风险源引起的风险。"@zh-cn ;
+       rdfs:label "是风险源于"@zh-cn .
+
+
+###  https://w3id.org/airo#来源于
+:来源于 rdf:type owl:ObjectProperty ;
+     rdfs:domain :详细描述 ;
+     rdfs:range :信息来源 ;
+     rdfs:comment "指明描述信息的原始出处。"@zh-cn ;
+     rdfs:label "来源于"@zh-cn .
+
+
+###  https://w3id.org/airo#生成技术文档
+:生成技术文档 rdf:type owl:ObjectProperty ;
+        rdfs:subPropertyOf <http://www.w3.org/ns/prov#generated> ;
+        rdfs:domain :技术文档编制 ;
+        rdfs:range :技术文档 ;
+        rdfs:comment "指示生成了技术文档。"@zh-cn ;
+        rdfs:label "生成技术文档"@zh-cn .
+
+
+###  https://w3id.org/airo#生成输出
+:生成输出 rdf:type owl:ObjectProperty ;
+      rdfs:domain [ rdf:type owl:Class ;
+                    owl:unionOf ( :AI系统
+                                  :AI组件
+                                )
+                  ] ;
+      rdfs:range :输出 ;
+      rdfs:comment "指定生成的输出内容。"@zh-cn ;
+      rdfs:label "生成输出"@zh-cn .
+
+
+###  https://w3id.org/airo#由机构报道
+:由机构报道 rdf:type owl:ObjectProperty ;
+       rdfs:domain :新闻报道 ;
+       rdfs:range :报道机构 ;
+       rdfs:comment "指明新闻或报告的发布机构。"@zh-cn ;
+       rdfs:label "由机构报道"@zh-cn .
+
+
+###  https://w3id.org/airo#符合标准
+:符合标准 rdf:type owl:ObjectProperty ;
+      rdfs:range :标准 ;
+      rdfs:comment "指示符合特定的标准。"@zh-cn ;
+      rdfs:label "符合标准"@zh-cn .
+
+
+###  https://w3id.org/airo#符合法规
+:符合法规 rdf:type owl:ObjectProperty ;
+      rdfs:range :法规 ;
+      rdfs:comment "指示符合特定的法规。"@zh-cn ;
+      rdfs:label "符合法规"@zh-cn .
+
+
+###  https://w3id.org/airo#被使用于地点
+:被使用于地点 rdf:type owl:ObjectProperty ;
+        rdfs:domain [ rdf:type owl:Class ;
+                      owl:unionOf ( :AI系统
+                                    :AI组件
+                                  )
+                    ] ;
+        rdfs:range :使用地点 ;
+        rdfs:comment "指示系统使用的地点。"@zh-cn ;
+        rdfs:label "被使用于地点"@zh-cn .
+
+
+###  https://w3id.org/airo#被开发于
+:被开发于 rdf:type owl:ObjectProperty ;
+      rdfs:domain [ rdf:type owl:Class ;
+                    owl:unionOf ( :AI系统
+                                  :AI组件
+                                )
+                  ] ;
+      rdfs:range :AI开发者 ;
+      rdfs:comment "指示由谁开发。"@zh-cn ;
+      rdfs:label "被开发于"@zh-cn .
+
+
+###  https://w3id.org/airo#被报道于
+:被报道于 rdf:type owl:ObjectProperty ;
+      rdfs:domain [ rdf:type owl:Class ;
+                    owl:unionOf ( :风险
+                                  :风险管理活动
+                                )
+                  ] ;
+      rdfs:range :新闻报道 ;
+      rdfs:comment "关联风险事件或活动与其原始新闻报道。"@zh-cn ;
+      rdfs:label "被报道于"@zh-cn .
+
+
+###  https://w3id.org/airo#被提供于
+:被提供于 rdf:type owl:ObjectProperty ;
+      rdfs:domain [ rdf:type owl:Class ;
+                    owl:unionOf ( :AI系统
+                                  :AI组件
+                                  :输入
+                                )
+                  ] ;
+      rdfs:range :AI提供者 ;
+      rdfs:comment "指示由谁提供。"@zh-cn ;
+      rdfs:label "被提供于"@zh-cn .
+
+
+###  https://w3id.org/airo#被部署于
+:被部署于 rdf:type owl:ObjectProperty ;
+      rdfs:domain [ rdf:type owl:Class ;
+                    owl:unionOf ( :AI系统
+                                  :AI组件
+                                )
+                  ] ;
+      rdfs:range :AI部署者 ;
+      rdfs:comment "指示由谁部署。"@zh-cn ;
+      rdfs:label "被部署于"@zh-cn .
+
+
+###  https://w3id.org/airo#触发风险评估
+:触发风险评估 rdf:type owl:ObjectProperty ;
+        rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasInformedBy> ;
+        rdfs:domain :上市后监控活动 ;
+        rdfs:range :风险识别 ;
+        rdfs:comment "指示监控活动触发了新的风险评估。"@zh-cn ;
+        rdfs:label "触发风险评估"@zh-cn .
+
+
+###  https://w3id.org/airo#记录事件
+:记录事件 rdf:type owl:ObjectProperty ;
+      rdfs:subPropertyOf <http://www.w3.org/ns/prov#generated> ;
+      rdfs:domain :记录保存活动 ;
+      rdfs:comment "指示记录了具体事件或日志。"@zh-cn ;
+      rdfs:label "记录事件"@zh-cn .
+
+
+###  https://w3id.org/airo#识别风险
+:识别风险 rdf:type owl:ObjectProperty ;
+      rdfs:subPropertyOf <http://www.w3.org/ns/prov#generated> ;
+      rdfs:domain :风险识别 ;
+      rdfs:range :风险 ;
+      rdfs:comment "指示识别出了具体风险。"@zh-cn ;
+      rdfs:label "识别风险"@zh-cn .
+
+
+###  https://w3id.org/airo#运行于硬件
+:运行于硬件 rdf:type owl:ObjectProperty ;
+       rdfs:domain :AI系统 ;
+       rdfs:range :硬件平台 ;
+       rdfs:comment "指示运行所在的硬件平台。"@zh-cn ;
+       rdfs:label "运行于硬件"@zh-cn .
+
+
+###  https://w3id.org/airo#遵循行为准则
+:遵循行为准则 rdf:type owl:ObjectProperty ;
+        rdfs:range :行为准则 ;
+        rdfs:comment "指示实体遵循的行为准则。"@zh-cn ;
+        rdfs:label "遵循行为准则"@zh-cn .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  https://w3id.org/airo#AI对象
+:AI对象 rdf:type owl:Class ;
+      rdfs:subClassOf :利益相关者 ;
+      rdfs:comment "受 AI 使用影响或作为 AI 处理对象的实体（例如被面部识别扫描的人） (来源: AIRO)。"@zh-cn ;
+      rdfs:label "AI对象"@zh-cn .
+
+
+###  https://w3id.org/airo#AI开发者
+:AI开发者 rdf:type owl:Class ;
+       rdfs:subClassOf :利益相关者 ;
+       rdfs:comment "涉及 AI 服务和产品开发、编码或设计的组织或实体 (来源: ISO/IEC 22989)。"@zh-cn ;
+       rdfs:label "AI开发者"@zh-cn .
+
+
+###  https://w3id.org/airo#AI技术
+:AI技术 rdf:type owl:Class ;
+      rdfs:comment "系统开发中使用的方法或技术，如机器学习、逻辑编程或知识库方法 (来源: ISO/IEC 22989)。"@zh-cn ;
+      rdfs:label "AI技术"@zh-cn .
+
+
+###  https://w3id.org/airo#AI提供者
+:AI提供者 rdf:type owl:Class ;
+       rdfs:subClassOf :AI运营者 ;
+       rdfs:comment "开发 AI 系统，或拥有 AI 系统并以其名义投放市场或投入使用的自然人、法人或公共机构 (来源: EU AI Act)。"@zh-cn ;
+       rdfs:label "AI提供者"@zh-cn .
+
+
+###  https://w3id.org/airo#AI模型
+:AI模型 rdf:type owl:Class ;
+      rdfs:subClassOf :AI组件 ;
+      rdfs:comment "基于输入数据生成推理或预测的物理或数学结构 (来源: ISO/IEC TR 24028)。"@zh-cn ;
+      rdfs:label "AI模型"@zh-cn .
+
+
+###  https://w3id.org/airo#AI模型开发活动
+:AI模型开发活动 rdf:type owl:Class ;
+          rdfs:subClassOf :AI生命周期活动 ;
+          rdfs:comment "构建、训练和优化 AI 模型的活动，包括模型设计、特征工程和参数拟合 (来源: ISO/IEC 5338)。"@zh-cn ;
+          rdfs:label "AI模型开发活动"@zh-cn .
+
+
+###  https://w3id.org/airo#AI生命周期活动
+:AI生命周期活动 rdf:type owl:Class ;
+          rdfs:comment "指AI系统从概念形成、开发、部署到退役过程中执行的任何技术或管理过程。替代了原有的静态'生命周期阶段'概念 (来源: ISO/IEC 5338 AI system life cycle processes)。"@zh-cn ;
+          rdfs:label "AI生命周期活动"@zh-cn .
+
+
+###  https://w3id.org/airo#AI用户
+:AI用户 rdf:type owl:Class ;
+      rdfs:subClassOf :利益相关者 ;
+      rdfs:comment "与系统直接交互的个人或团体 (来源: ISO/IEC TR 24028)。"@zh-cn ;
+      rdfs:label "AI用户"@zh-cn .
+
+
+###  https://w3id.org/airo#AI系统
+:AI系统 rdf:type owl:Class ;
+      rdfs:comment "一种基于机器的系统，设计为以不同程度的自主性运行，可能在部署后表现出适应性，并为显式或隐式目标，从收到的输入中推断如何生成预测、内容、推荐或决策等输出 (来源: EU AI Act Art 3(1))。"@zh-cn ;
+      rdfs:label "AI系统"@zh-cn .
+
+
+###  https://w3id.org/airo#AI组件
+:AI组件 rdf:type owl:Class ;
+      rdfs:comment "构成 AI 系统功能的要素，包括软件、硬件、数据或算法 (来源: ISO/IEC 22989)。"@zh-cn ;
+      rdfs:label "AI组件"@zh-cn .
+
+
+###  https://w3id.org/airo#AI能力
+:AI能力 rdf:type owl:Class ;
+      rdfs:comment "AI 系统实现其目的所需的技术能力或功能特性 (来源: ISO/IEC 22989)。"@zh-cn ;
+      rdfs:label "AI能力"@zh-cn .
+
+
+###  https://w3id.org/airo#AI运营者
+:AI运营者 rdf:type owl:Class ;
+       rdfs:subClassOf :利益相关者 ;
+       rdfs:comment "指提供者、产品制造商、部署者、授权代表、进口商或分销商等对系统负有责任的实体 (来源: EU AI Act)。"@zh-cn ;
+       rdfs:label "AI运营者"@zh-cn .
+
+
+###  https://w3id.org/airo#AI部署者
+:AI部署者 rdf:type owl:Class ;
+       rdfs:subClassOf :AI运营者 ;
+       rdfs:comment "任何在其职权下使用 AI 系统的自然人、法人、公共机构或其他团体（个人非职业活动除外） (来源: EU AI Act)。"@zh-cn ;
+       rdfs:label "AI部署者"@zh-cn .
+
+
+###  https://w3id.org/airo#上市后监控活动
+:上市后监控活动 rdf:type owl:Class ;
+         rdfs:subClassOf :AI生命周期活动 ;
+         rdfs:comment "系统投放市场后，主动收集和分析性能及风险数据的持续活动 (来源: AI Act Art. 72)。"@zh-cn ;
+         rdfs:label "上市后监控活动"@zh-cn .
+
+
+###  https://w3id.org/airo#严重事件报告
+:严重事件报告 rdf:type owl:Class ;
+        rdfs:subClassOf :上市后监控活动 ;
+        rdfs:comment "向监管机构报告导致人员伤亡或基础设施中断的严重事件的活动 (来源: AI Act Art. 73)。"@zh-cn ;
+        rdfs:label "严重事件报告"@zh-cn .
+
+
+###  https://w3id.org/airo#严重性
+:严重性 rdf:type owl:Class ;
+     rdfs:comment "后果或影响的程度等级 (Severity) (来源: ISO Guide 73)。"@zh-cn ;
+     rdfs:label "严重性"@zh-cn .
+
+
+###  https://w3id.org/airo#人类介入
+:人类介入 rdf:type owl:Class ;
+      rdfs:comment "指示人类在 AI 运行过程中的监督（Human-in-the-loop）或操作 (来源: EU AI Act Art 14)。"@zh-cn ;
+      rdfs:label "人类介入"@zh-cn .
+
+
+###  https://w3id.org/airo#使用地点
+:使用地点 rdf:type owl:Class ;
+      rdfs:comment "AI系统部署、运行的具体物理场所（如工厂、医院）、地理区域（如欧盟、中国）或逻辑网络位置 (来源: EU AI Act)。"@zh-cn ;
+      rdfs:label "使用地点"@zh-cn .
+
+
+###  https://w3id.org/airo#信息来源
+:信息来源 rdf:type owl:Class ;
+      rdfs:subClassOf :文档 ;
+      rdfs:comment "提供风险或活动信息的原始出处，如新闻链接、技术报告、白皮书或政府公告 (来源: ISO/IEC 27000)。"@zh-cn ;
+      rdfs:label "信息来源"@zh-cn .
+
+
+###  https://w3id.org/airo#利益相关者
+:利益相关者 rdf:type owl:Class ;
+       rdfs:comment "能够影响决策或活动、受其影响或自认为受其影响的个人、团体或组织 (来源: ISO/IEC 22989)。"@zh-cn ;
+       rdfs:label "利益相关者"@zh-cn .
+
+
+###  https://w3id.org/airo#危险源
+:危险源 rdf:type owl:Class ;
+     rdfs:subClassOf :风险源 ;
+     rdfs:comment "潜在的伤害来源 (Hazard) (来源: ISO 31073)。"@zh-cn ;
+     rdfs:label "危险源"@zh-cn .
+
+
+###  https://w3id.org/airo#发现时间
+:发现时间 rdf:type owl:Class ;
+      rdfs:subClassOf :时间要素 ;
+      rdfs:comment "风险、异常或事故首次被人类、系统识别、检测到或被媒体公开报道的时间点 (来源: ISO/IEC 27035)。"@zh-cn ;
+      rdfs:label "发现时间"@zh-cn .
+
+
+###  https://w3id.org/airo#发生时间
+:发生时间 rdf:type owl:Class ;
+      rdfs:subClassOf :时间要素 ;
+      rdfs:comment "风险开始显现、事故发生或活动开始执行的具体时间点或日期 (来源: ISO/IEC 27035)。"@zh-cn ;
+      rdfs:label "发生时间"@zh-cn .
+
+
+###  https://w3id.org/airo#变更
+:变更 rdf:type owl:Class ;
+    rdfs:comment "实体（如系统、数据、环境）中的变动或修改，可能触发新的风险评估 (来源: AIRO)。"@zh-cn ;
+    rdfs:label "变更"@zh-cn .
+
+
+###  https://w3id.org/airo#可能性
+:可能性 rdf:type owl:Class ;
+     rdfs:comment "某事发生的概率或几率 (Likelihood) (来源: ISO 31073)。"@zh-cn ;
+     rdfs:label "可能性"@zh-cn .
+
+
+###  https://w3id.org/airo#后果
+:后果 rdf:type owl:Class ;
+    rdfs:subClassOf :风险概念 ;
+    rdfs:comment "影响目标的风险事件的直接结果 (来源: ISO 31000)。"@zh-cn ;
+    rdfs:label "后果"@zh-cn .
+
+
+###  https://w3id.org/airo#威胁
+:威胁 rdf:type owl:Class ;
+    rdfs:subClassOf :风险源 ;
+    rdfs:comment "危险、伤害或其他不良后果的潜在来源，通常暗示恶意意图 (Threat) (来源: ISO 27000)。"@zh-cn ;
+    rdfs:label "威胁"@zh-cn .
+
+
+###  https://w3id.org/airo#影响
+:影响 rdf:type owl:Class ;
+    rdfs:subClassOf :后果 ;
+    rdfs:comment "后果对个人、群体、社会、环境等造成的最终结果 (Impact) (来源: ISO 31000)。"@zh-cn ;
+    rdfs:label "影响"@zh-cn .
+
+
+###  https://w3id.org/airo#影响领域
+:影响领域 rdf:type owl:Class ;
+      rdfs:comment "受 AI 系统影响的领域或方面，例如身体健康、隐私权、民主进程或环境 (来源: AIRO)。"@zh-cn ;
+      rdfs:label "影响领域"@zh-cn .
+
+
+###  https://w3id.org/airo#技术文档
+:技术文档 rdf:type owl:Class ;
+      rdfs:subClassOf :文档 ;
+      rdfs:comment "包含系统设计、开发、测试和验证细节的合规性文档，用于证明符合法规要求 (来源: AI Act Annex IV)。"@zh-cn ;
+      rdfs:label "技术文档"@zh-cn .
+
+
+###  https://w3id.org/airo#技术文档编制
+:技术文档编制 rdf:type owl:Class ;
+        rdfs:subClassOf :AI生命周期活动 ;
+        rdfs:comment "创建、更新和维护合规性技术文档的活动，以证明符合法律要求 (来源: AI Act Art. 11)。"@zh-cn ;
+        rdfs:label "技术文档编制"@zh-cn .
+
+
+###  https://w3id.org/airo#报道机构
+:报道机构 rdf:type owl:Class ;
+      rdfs:subClassOf :利益相关者 ;
+      rdfs:comment "发布AI相关新闻、调查报告或风险预警的媒体、研究机构或非政府组织。"@zh-cn ;
+      rdfs:label "报道机构"@zh-cn .
+
+
+###  https://w3id.org/airo#持续时间
+:持续时间 rdf:type owl:Class ;
+      rdfs:subClassOf :时间要素 ;
+      rdfs:comment "从风险/活动开始到结束、解决或闭环之间的时间跨度 (来源: ISO 8601)。"@zh-cn ;
+      rdfs:label "持续时间"@zh-cn .
+
+
+###  https://w3id.org/airo#数据
+:数据 rdf:type owl:Class ;
+    rdfs:subClassOf :AI组件 ;
+    rdfs:comment "指数据集及广泛的数据概念，包括训练数据、测试数据和验证数据 (来源: ISO/IEC 20546)。"@zh-cn ;
+    rdfs:label "数据"@zh-cn .
+
+
+###  https://w3id.org/airo#数据偏差检测与纠正
+:数据偏差检测与纠正 rdf:type owl:Class ;
+           rdfs:subClassOf :数据治理活动 ;
+           rdfs:comment "专门检测并纠正数据集中可能影响健康、安全或基本权利的偏差的活动 (来源: AI Act Art. 10(2)(f))。"@zh-cn ;
+           rdfs:label "数据偏差检测与纠正"@zh-cn .
+
+
+###  https://w3id.org/airo#数据治理活动
+:数据治理活动 rdf:type owl:Class ;
+        rdfs:subClassOf :AI生命周期活动 ;
+        rdfs:comment "与数据收集、准备、清洗、评估和管理相关的活动，旨在确保数据质量和合规性 (来源: AI Act Art. 10)。"@zh-cn ;
+        rdfs:label "数据治理活动"@zh-cn .
+
+
+###  https://w3id.org/airo#文档
+:文档 rdf:type owl:Class ;
+    rdfs:comment "记录了信息的任何介质，包括文本、图表或电子记录 (来源: ISO 15489)。"@zh-cn ;
+    rdfs:label "文档"@zh-cn .
+
+
+###  https://w3id.org/airo#新闻报道
+:新闻报道 rdf:type owl:Class ;
+      rdfs:subClassOf :文档 ;
+      rdfs:comment "描述风险或活动的具体媒体文章、广播内容或网络帖子。"@zh-cn ;
+      rdfs:label "新闻报道"@zh-cn .
+
+
+###  https://w3id.org/airo#时间要素
+:时间要素 rdf:type owl:Class ;
+      rdfs:comment "用于描述风险显现或活动执行的时间属性集合，构成时间线的基础。"@zh-cn ;
+      rdfs:label "时间要素 (时间线)"@zh-cn .
+
+
+###  https://w3id.org/airo#标准
+:标准 rdf:type owl:Class ;
+    rdfs:comment "由认可的标准化机构（如 ISO/IEC, CEN/CENELEC）制定的技术规范 (来源: ISO)。"@zh-cn ;
+    rdfs:label "标准"@zh-cn .
+
+
+###  https://w3id.org/airo#模态
+:模态 rdf:type owl:Class ;
+    rdfs:comment "系统存在或被表现的形式（如文本、图像、音频、视频） (来源: AIRO)。"@zh-cn ;
+    rdfs:label "模态"@zh-cn .
+
+
+###  https://w3id.org/airo#法规
+:法规 rdf:type owl:Class ;
+    rdfs:comment "具有约束力的立法法案 (如 EU AI Act) (来源: EU Law)。"@zh-cn ;
+    rdfs:label "法规"@zh-cn .
+
+
+###  https://w3id.org/airo#版本
+:版本 rdf:type owl:Class ;
+    rdfs:comment "分配给 AI 系统唯一状态的唯一编号或名称 (来源: AIRO)。"@zh-cn ;
+    rdfs:label "版本"@zh-cn .
+
+
+###  https://w3id.org/airo#目的
+:目的 rdf:type owl:Class ;
+    rdfs:comment "使用实体或采取行动的最终目标 (Intended Purpose) (来源: EU AI Act)。"@zh-cn ;
+    rdfs:label "目的"@zh-cn .
+
+
+###  https://w3id.org/airo#硬件平台
+:硬件平台 rdf:type owl:Class ;
+      rdfs:comment "系统运行所在的物理硬件设施，如 CPU、GPU、TPU (来源: AIRO)。"@zh-cn ;
+      rdfs:label "硬件平台"@zh-cn .
+
+
+###  https://w3id.org/airo#脆弱性
+:脆弱性 rdf:type owl:Class ;
+     rdfs:comment "指实体（如 AI 系统或组件）导致容易受风险源影响的弱点 (Vulnerability) (来源: ISO 27000)。"@zh-cn ;
+     rdfs:label "脆弱性"@zh-cn .
+
+
+###  https://w3id.org/airo#自动化水平
+:自动化水平 rdf:type owl:Class ;
+       rdfs:comment "指 AI 系统运行的自主程度，范围从辅助人类到完全自主 (来源: ISO/IEC 22989)。"@zh-cn ;
+       rdfs:label "自动化水平"@zh-cn .
+
+
+###  https://w3id.org/airo#行为准则
+:行为准则 rdf:type owl:Class ;
+      rdfs:comment "一套非约束性的规范和责任，用于指导 AI 的合规开发和使用 (来源: EU AI Act)。"@zh-cn ;
+      rdfs:label "行为准则"@zh-cn .
+
+
+###  https://w3id.org/airo#记录保存活动
+:记录保存活动 rdf:type owl:Class ;
+        rdfs:subClassOf :AI生命周期活动 ;
+        rdfs:comment "系统运行期间自动记录事件日志的活动，用于可追溯性 (来源: AI Act Art. 12)。"@zh-cn ;
+        rdfs:label "记录保存活动"@zh-cn .
+
+
+###  https://w3id.org/airo#许可证
+:许可证 rdf:type owl:Class ;
+     rdfs:comment "代表版权或许可使用协议 (来源: SPDX)。"@zh-cn ;
+     rdfs:label "许可证"@zh-cn .
+
+
+###  https://w3id.org/airo#详细描述
+:详细描述 rdf:type owl:Class ;
+      rdfs:subClassOf :文档 ;
+      rdfs:comment "对AI风险、新闻报道或活动过程的清晰、结构化文本概述，用于记录核心事实摘要 (来源: Dublin Core)。"@zh-cn ;
+      rdfs:label "详细描述"@zh-cn .
+
+
+###  https://w3id.org/airo#输入
+:输入 rdf:type owl:Class ;
+    rdfs:comment "系统或组件生成输出所需的输入数据、信号或指令 (来源: AIRO)。"@zh-cn ;
+    rdfs:label "输入"@zh-cn .
+
+
+###  https://w3id.org/airo#输出
+:输出 rdf:type owl:Class ;
+    rdfs:comment "系统生成的结果、预测、内容或决策 (来源: AIRO)。"@zh-cn ;
+    rdfs:label "输出"@zh-cn .
+
+
+###  https://w3id.org/airo#输出可控性模式
+:输出可控性模式 rdf:type owl:Class ;
+         rdfs:comment "人类对 AI 输出行使控制的级别或方式 (来源: AIRO)。"@zh-cn ;
+         rdfs:label "输出可控性模式"@zh-cn .
+
+
+###  https://w3id.org/airo#通用AI模型
+:通用AI模型 rdf:type owl:Class ;
+        rdfs:subClassOf :AI模型 ;
+        rdfs:comment "表现出显著通用性，能胜任广泛任务并可集成到下游系统中的 AI 模型 (GPAI) (来源: EU AI Act)。"@zh-cn ;
+        rdfs:label "通用AI模型"@zh-cn .
+
+
+###  https://w3id.org/airo#领域
+:领域 rdf:type owl:Class ;
+    rdfs:comment "与经济活动相关的区域、部门或行业，如医疗、金融、交通 (来源: NACE Codes)。"@zh-cn ;
+    rdfs:label "领域"@zh-cn .
+
+
+###  https://w3id.org/airo#频率
+:频率 rdf:type owl:Class ;
+    rdfs:comment "单位时间内事件或结果发生的数量 (来源: ISO 31073)。"@zh-cn ;
+    rdfs:label "频率"@zh-cn .
+
+
+###  https://w3id.org/airo#风险
+:风险 rdf:type owl:Class ;
+    rdfs:subClassOf :风险概念 ;
+    rdfs:comment "与 AI 系统相关的不确定性状态，由后果的可能性和严重性组合而成 (来源: ISO 31000)。"@zh-cn ;
+    rdfs:label "风险"@zh-cn .
+
+
+###  https://w3id.org/airo#风险分析
+:风险分析 rdf:type owl:Class ;
+      rdfs:subClassOf :风险管理活动 ;
+      rdfs:comment "理解风险性质并确定风险等级（结合可能性与严重性）的过程 (来源: ISO 31000)。"@zh-cn ;
+      rdfs:label "风险分析"@zh-cn .
+
+
+###  https://w3id.org/airo#风险分类
+:风险分类 rdf:type owl:Class ;
+      rdfs:subClassOf :风险概念 ;
+      rdfs:comment "根据风险的性质、来源、后果或影响领域对风险进行的结构化分组（例如：技术鲁棒性风险、基本权利风险） (来源: ISO 31000 Risk Taxonomy)。"@zh-cn ;
+      rdfs:label "风险分类"@zh-cn .
+
+
+###  https://w3id.org/airo#风险审查与监控
+:风险审查与监控 rdf:type owl:Class ;
+         rdfs:subClassOf :风险管理活动 ;
+         rdfs:comment "对风险管理过程的持续监控和定期审查，以确保有效性 (来源: ISO 31000)。"@zh-cn ;
+         rdfs:label "风险审查与监控"@zh-cn .
+
+
+###  https://w3id.org/airo#风险应对
+:风险应对 rdf:type owl:Class ;
+      rdfs:subClassOf :风险管理活动 ;
+      rdfs:comment "选择并实施措施以修正风险（如降低、消除、转移）的过程 (来源: ISO 31000)。"@zh-cn ;
+      rdfs:label "风险应对"@zh-cn .
+
+
+###  https://w3id.org/airo#风险控制措施
+:风险控制措施 rdf:type owl:Class ;
+        rdfs:comment "用于修正或维持风险的具体措施（原‘风险控制’类，现作为风险应对活动的产出） (来源: ISO 31000)。"@zh-cn ;
+        rdfs:label "风险控制措施"@zh-cn .
+
+
+###  https://w3id.org/airo#风险概念
+:风险概念 rdf:type owl:Class ;
+      rdfs:comment "指代风险、风险源、后果和影响的总称 (来源: ISO 31000)。"@zh-cn ;
+      rdfs:label "风险概念"@zh-cn .
+
+
+###  https://w3id.org/airo#风险源
+:风险源 rdf:type owl:Class ;
+     rdfs:subClassOf :风险概念 ;
+     rdfs:comment "单独或组合起来具有产生风险潜力的要素 (Risk Source) (来源: ISO 31000)。"@zh-cn ;
+     rdfs:label "风险源"@zh-cn .
+
+
+###  https://w3id.org/airo#风险等级
+:风险等级 rdf:type owl:Class ;
+      rdfs:subClassOf :风险概念 ;
+      rdfs:comment "风险的幅度或重要性，通常根据后果的严重性和发生的可能性的组合来确定（如：高、中、低、极高） (来源: ISO Guide 73)。"@zh-cn ;
+      rdfs:label "风险等级"@zh-cn .
+
+
+###  https://w3id.org/airo#风险管理活动
+:风险管理活动 rdf:type owl:Class ;
+        rdfs:comment "针对AI系统风险进行识别、分析、评价和应对的协调活动，旨在指导和控制组织关于风险的决策。替代了原有的'风险控制'概念 (来源: ISO 31000 Risk management)。"@zh-cn ;
+        rdfs:label "风险管理活动"@zh-cn .
+
+
+###  https://w3id.org/airo#风险评价
+:风险评价 rdf:type owl:Class ;
+      rdfs:subClassOf :风险管理活动 ;
+      rdfs:comment "将风险分析结果与风险准则进行比较，以确定风险是否可接受的过程 (来源: ISO 31000)。"@zh-cn ;
+      rdfs:label "风险评价"@zh-cn .
+
+
+###  https://w3id.org/airo#风险识别
+:风险识别 rdf:type owl:Class ;
+      rdfs:subClassOf :风险管理活动 ;
+      rdfs:comment "发现、识别和描述风险源及其潜在后果的过程 (来源: ISO 31000)。"@zh-cn ;
+      rdfs:label "风险识别"@zh-cn .
+
+
+###  https://w3id.org/airo#验证与确认活动
+:验证与确认活动 rdf:type owl:Class ;
+         rdfs:subClassOf :AI生命周期活动 ;
+         rdfs:comment "确保系统符合规格要求（验证）并满足用户预期用途（确认）的测试活动 (来源: AI Act Art. 15)。"@zh-cn ;
+         rdfs:label "验证与确认活动"@zh-cn .
+
+
+###  Generated by the OWL API (version 5.1.18) https://github.com/owlcs/owlapi/
